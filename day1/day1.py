@@ -1,21 +1,36 @@
-ans = 'l1: {}, l2: {}, l3: {}, product: {}'
-sum_ans = 'l1: {}, l2: {}, l3: {}, sum: {}'
-with open('./input1.txt') as inputfile:
-    lines = [ int(line) for line in inputfile ]
-    lines.sort()
-    print(len(lines))
+from itertools import combinations
 
-    cutoff = 2020 - lines[0] -lines[1]
-    lines = [line for line in lines if line <= cutoff]
-    print(len(lines))
-    print(lines)
+DEBUG = True
 
-    while len(lines) > 2:
-        l1 = lines.pop(0)
+def pt1(entries):
+    DEBUG_STR = 'e1: {}, e2: {}, sum: {}, product: {}'
 
-        for l2 in lines:
-            for l3 in lines[1::]:
-                sumlines = l1+l2+l3
-                #print(sum_ans.format(l1, l2, l3, sumlines))
-                if  sumlines == 2020:
-                    print(ans.format(l1, l2, l3, l1*l2*l3))
+    for entry1, entry2 in combinations(entries, 2):
+        if DEBUG:
+            print(DEBUG_STR.format(entry1, entry2, entry1+entry2, entry1*entry2))
+
+        if entry1+entry2 == 2020:
+            return entry1*entry2
+
+def pt2(entries):
+    DEBUG_STR = 'e1: {}, e2: {}, e3: {}, sum: {}, product: {}'
+
+    for e1, e2, e3 in combinations(entries, 3):
+        if DEBUG:
+            print(DEBUG_STR.format(e1, e2, e3, e1+e2+e3, e1*e2*e3))
+
+        if e1+e2+e3 == 2020:
+            return e1*e2*e3
+
+if __name__ == '__main__':
+    with open('./input.txt') as inputfile:
+        DEBUG = False
+
+        entries = [ int(line) for line in inputfile ]
+        entries.sort()
+
+        if DEBUG:
+            print('Total entries:', len(entries))
+
+        print('Pt 1 product:', pt1(entries))
+        print('Pt 2 product:', pt2(entries))
