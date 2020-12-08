@@ -1,5 +1,0 @@
-nop +0
-acc +3
-jmp +2
-nop +0
-acc +1
