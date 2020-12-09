@@ -14,9 +14,6 @@ class Processor:
         if filename is not None:
             self.load(filename)
 
-    def __str__(self):
-        return str(self.accumulator)
-
     def load(self, filename):
         with open(filename) as inputfile:
             for line in inputfile:
@@ -93,7 +90,7 @@ if __name__ == '__main__':
 
     if not DEBUG:
         print('acc:', Processor('input.txt').run()) # 1949
-        print('acc:', Processor('input.txt').repair()) # 1949
+        print('acc:', Processor('input.txt').repair()) # 2092
     else:
         print('acc:', Processor('test.txt').run()) # 5
         print('acc:', Processor('test.txt').repair()) # 8
