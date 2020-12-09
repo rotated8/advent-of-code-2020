@@ -7,7 +7,7 @@ def find_invalid(filename, size):
 
     with open(filename) as inputfile:
         for line in inputfile:
-            num = int(line.strip())
+            num = int(line)
 
             if size > 0:
                 # Decrement size to load the cache
@@ -40,7 +40,7 @@ def find_weakness(filename, target):
 
     with open(filename) as inputfile:
         for line in inputfile:
-            stream.append(int(line.strip()))
+            stream.append(int(line))
 
     # In Python, `list.pop(0)` is slow, so we operate on the tail, and to preserve order, `reverse()`
     # We could probably assume that the stream does not contain two solutions, but...
@@ -49,19 +49,18 @@ def find_weakness(filename, target):
 
     while len(stream) > 0:
         idx = 0
+        # We're gonna pop the tail off anyway, might as well do it now.
         acc = stream.pop()
-        max_num, min_num = acc, acc
+        nums = {acc}
 
         while acc < target:
             # Lovely negative indexes, to move backwards through the list.
             idx -= 1
-            stream_num = stream[idx]
-            acc += stream_num
-            max_num = stream_num if stream_num > max_num else max_num
-            min_num = stream_num if stream_num < min_num else min_num
+            acc += stream[idx]
+            nums.add(stream[idx])
 
         if acc == target:
-            return max_num + min_num
+            return max(nums) + min(nums)
 
 
 if __name__ == '__main__':
