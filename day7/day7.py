@@ -53,7 +53,7 @@ class BagManager:
         for content in contents.split(', '):
             if not content.startswith('no other bags'):
                 match = BagManager.NAME_REGEX.match(content)
-                parsed_contents[match.group('name')] = match.group('num')
+                parsed_contents[match.group('name')] = int(match.group('num'))
 
         # Create or update this bag with what it contains
         bag = self.bags.get(bag_name)
@@ -97,8 +97,16 @@ class BagManager:
         return acceptable_bags
 
     def count_bags_in(self, bag_name):
-        #TODO.
-        return 1
+        bag = self.bags[bag_name]
+
+        # Add the bags directly in this bag
+        count = sum(bag.contents.values())
+
+        # Add the contents of all the bags contained in those bags
+        for content_bag, content_number in bag.contents.items():
+            count += content_number * self.count_bags_in(content_bag)
+
+        return count
 
 if __name__ == '__main__':
     DEBUG = False
