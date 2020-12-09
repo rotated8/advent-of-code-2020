@@ -43,23 +43,26 @@ def find_weakness(filename, target):
             stream.append(int(line.strip()))
 
     # In Python, `list.pop(0)` is slow, so we operate on the tail, and to preserve order, `reverse()`
-    # TODO
-    #stream.reverse()
+    # We could probably assume that the stream does not contain two solutions, but...
+    # If it does, this will return the "first" one.
+    stream.reverse()
 
     while len(stream) > 0:
-        acc = 0
         idx = 0
-        nums = list()
+        acc = stream.pop()
+        max_num, min_num = acc, acc
 
         while acc < target:
-            acc += stream[idx]
-            nums.append(stream[idx])
-            idx += 1
+            # Lovely negative indexes, to move backwards through the list.
+            idx -= 1
+            stream_num = stream[idx]
+            acc += stream_num
+            max_num = stream_num if stream_num > max_num else max_num
+            min_num = stream_num if stream_num < min_num else min_num
 
         if acc == target:
-            return min(nums) + max(nums)
+            return max_num + min_num
 
-        stream.pop(0)
 
 if __name__ == '__main__':
     DEBUG = False
@@ -69,7 +72,7 @@ if __name__ == '__main__':
 
     if not DEBUG:
         invalid = find_invalid('./input.txt', 25) # 1721308972
-        weakness = find_weakness('./input.txt', invalid) # ???
+        weakness = find_weakness('./input.txt', invalid) # 209694133
     else:
         invalid = find_invalid('./test.txt', 5) # 127
         weakness = find_weakness('./test.txt', invalid) # 62
